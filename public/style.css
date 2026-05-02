@@ -1,0 +1,66 @@
+:root {
+    --wa-bg-main: #0b141a;
+    --wa-bg-header: #202c33;
+    --wa-bg-sidebar: #111b21;
+    --wa-green: #00a884;
+    --wa-text-primary: #e9edef;
+    --wa-text-secondary: #8696a0;
+    --wa-border: #222d34;
+}
+
+body {
+    background-color: var(--wa-bg-main);
+    color: var(--wa-text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    height: 100vh;
+}
+
+.welcome-screen {
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: linear-gradient(135deg, #0b141a 0%, #111b21 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 5000; transition: opacity 0.5s ease;
+    text-align: center;
+}
+
+.ch-logo.large {
+    font-size: 80px;
+    background: linear-gradient(45deg, #00a884, #4285f4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.calculator-card {
+    background: var(--wa-bg-header);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid var(--wa-border);
+}
+
+.navbar {
+    background: var(--wa-bg-header);
+    padding: 10px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+.ch-logo {
+    width: 40px; height: 40px;
+    background: var(--wa-green);
+    color: white; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: bold;
+}
+
+.modal {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center;
+    z-index: 6000;
+}
+
+.modal-content {
+    background: var(--wa-bg-header); padding: 30px; border-radius: 12px;
+}

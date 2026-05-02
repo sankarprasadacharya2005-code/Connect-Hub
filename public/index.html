@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Hub - Structural Steel Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="welcome-screen">
+        <div class="welcome-content">
+            <div class="ch-logo large">CH</div>
+            <h1>Welcome to Connect Hub</h1>
+            <p>Experience the next level of structural engineering and private messaging. Secure, fast, and beautiful.</p>
+            <div class="welcome-actions">
+                <button class="btn btn-primary btn-lg" onclick="openModal('register-modal')">Create New Account</button>
+                <button class="btn btn-secondary btn-lg" onclick="openModal('login-modal')">Sign In to Continue</button>
+            </div>
+            <div class="welcome-footer">
+                <span>&copy; 2026 Connect Hub. All rights reserved.</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-left">
+                <div class="ch-logo">CH</div>
+                <span class="brand-name">Connect Hub</span>
+            </div>
+            <div class="nav-right" id="nav-actions">
+                <button class="btn btn-secondary" onclick="openModal('register-modal')">Create Account</button>
+                <button class="btn btn-primary" onclick="openModal('login-modal')">Login</button>
+            </div>
+        </nav>
+
+        <div class="main-content container mt-4">
+            <h2 class="section-title"><i class="fas fa-drafting-compass me-2"></i>Steel Section Properties</h2>
+            
+            <!-- TABLES SECTION -->
+            <div class="table-container mb-5">
+                <!-- Round Bar -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr><th colspan="5">Section Type: Round Bar</th></tr>
+                        <tr>
+                            <th>Size (mm)</th>
+                            <th>Area (cm²)</th>
+                            <th>Weight (kg/m)</th>
+                            <th>Zx (cm³)</th>
+                            <th>Zy (cm³)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>6</td><td>0.28</td><td>0.22</td><td>0.02</td><td>0.02</td></tr>
+                        <tr><td>8</td><td>0.50</td><td>0.39</td><td>0.05</td><td>0.05</td></tr>
+                        <tr><td>10</td><td>0.79</td><td>0.62</td><td>0.10</td><td>0.10</td></tr>
+                        <tr><td>12</td><td>1.13</td><td>0.89</td><td>0.17</td><td>0.17</td></tr>
+                    </tbody>
+                </table>
+
+                <!-- RHS Section -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr><th colspan="5">Section Type: Hollow Section - Rectangular (RHS)</th></tr>
+                        <tr>
+                            <th>Size (mm)</th>
+                            <th>Area (cm²)</th>
+                            <th>Weight (kg/m)</th>
+                            <th>Zx (cm³)</th>
+                            <th>Zy (cm³)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>50x30x3.0</td><td>4.44</td><td>3.49</td><td>6.39</td><td>4.52</td></tr>
+                        <tr><td>60x40x3.0</td><td>5.64</td><td>4.43</td><td>10.30</td><td>7.92</td></tr>
+                        <tr><td>80x40x4.0</td><td>8.96</td><td>7.03</td><td>21.10</td><td>13.60</td></tr>
+                        <tr><td>100x50x5.0</td><td>14.00</td><td>11.00</td><td>41.80</td><td>26.40</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CALCULATOR SECTION -->
+            <div class="calculator-card p-4">
+                <h3 class="mb-4 text-center"><i class="fas fa-calculator me-2"></i>Live Property Calculator</h3>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Select Type</label>
+                        <select id="sectionType" class="form-select">
+                            <option value="">-- Choose Type --</option>
+                            <option value="Round Bar">Round Bar</option>
+                            <option value="RHS">Rectangular Hollow (RHS)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Select Size</label>
+                        <select id="sectionSize" class="form-select" disabled>
+                            <option value="">-- Select Type First --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12 mt-4">
+                        <div id="resultsArea" class="p-3 bg-light border rounded d-none text-dark">
+                            <h5 class="border-bottom pb-2">Properties:</h5>
+                            <div class="row text-center">
+                                <div class="col-3"><small class="text-muted d-block">Weight</small><span id="resWeight" class="fw-bold">-</span></div>
+                                <div class="col-3"><small class="text-muted d-block">Area</small><span id="resArea" class="fw-bold">-</span></div>
+                                <div class="col-3"><small class="text-muted d-block">Zx</small><span id="resZx" class="fw-bold">-</span></div>
+                                <div class="col-3"><small class="text-muted d-block">Zy</small><span id="resZy" class="fw-bold">-</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <label class="form-label">Length (meters)</label>
+                        <input type="number" id="beamLength" class="form-control" placeholder="6.0">
+                    </div>
+                    <div class="col-md-12 mt-3">
+                        <div class="alert alert-primary">
+                            <strong>Total Weight: </strong> <span id="totalWeight">0.00</span> kg
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals (Simplified) -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <h3>Login</h3>
+            <button onclick="closeModal('login-modal')">Close</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

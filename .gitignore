@@ -1,0 +1,8 @@
+node_modules/
+.env
+*.log
+package-lock.json
+client_secret_*.json
+tokens.json
+credentials.json
+firebase-adminsdk.json
