@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body class="dark-theme">
 
     <!-- ===== WELCOME / LANDING SCREEN ===== -->
@@ -33,66 +35,60 @@
     <!-- ===== MAIN APP (shown after login) ===== -->
     <div class="app-container" id="app-container" style="display:none;">
         <div class="chat-layout">
-            <!-- Sidebar -->
+            <!-- Sidebar V2 (Global Actions) -->
+            <div class="sidebar-v2">
+                <div class="sidebar-v2-top">
+                    <div class="ch-logo-small">CH</div>
+                </div>
+                <div class="sidebar-v2-middle">
+                    <button class="v2-btn active" title="Chats"><i class="fas fa-comment-alt"></i></button>
+                    <button class="v2-btn" title="Requests" onclick="toggleRequests()">
+                        <i class="fas fa-user-friends"></i>
+                        <span id="request-badge" class="badge d-none">0</span>
+                    </button>
+                    <button class="v2-btn" title="Add Friend" onclick="toggleSearch()"><i class="fas fa-user-plus"></i></button>
+                </div>
+                <div class="sidebar-v2-bottom">
+                    <button class="v2-btn" title="Settings" onclick="toggleSettings()"><i class="fas fa-cog"></i></button>
+                    <div class="v2-profile-wrapper">
+                        <img src="" id="v2-my-avatar" class="avatar-v2" onclick="toggleSettings()">
+                    </div>
+                    <button class="v2-btn logout-btn" title="Logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+
+            <!-- Chat Sidebar (List) -->
             <div class="chat-sidebar">
-                <div class="sidebar-header">
-                    <div class="brand-group">
-                        <div class="ch-logo-small">CH</div>
-                        <span class="app-title">Connect Hub</span>
-                    </div>
-                    <div class="header-actions">
-                        <button class="btn-icon" title="Friend Requests" onclick="toggleRequests()">
-                            <i class="fas fa-user-friends"></i>
-                            <span id="request-badge" class="badge d-none">0</span>
-                        </button>
-                        <button class="btn-icon" title="Toggle Theme" onclick="toggleTheme()">
-                            <i class="fas fa-moon" id="theme-icon"></i>
-                        </button>
-                        <div class="dropdown-wrapper">
-                            <button class="btn-icon" id="header-menu-btn" onclick="toggleDropdown(event)">
-                                <i class="fas fa-ellipsis-v"></i>
-                            </button>
-                            <div id="header-dropdown" class="custom-dropdown d-none">
-                                <div class="dropdown-item" onclick="openProfileModal()">
-                                    <i class="fas fa-user"></i> Profile
-                                </div>
-                                <div class="dropdown-item" onclick="openEditModal('name')">
-                                    <i class="fas fa-signature"></i> Edit Name
-                                </div>
-                                <div class="dropdown-item" onclick="openEditModal('bio')">
-                                    <i class="fas fa-info-circle"></i> Edit Bio
-                                </div>
-                                <div class="dropdown-item" onclick="openEditModal('picture')">
-                                    <i class="fas fa-camera"></i> Change Photo
-                                </div>
-                                <hr>
-                                <div class="dropdown-item logout-item" onclick="logout()">
-                                    <i class="fas fa-sign-out-alt"></i> Logout
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="sidebar-header-v2">
+                    <h2>Chats</h2>
                 </div>
 
-                <!-- Requests Area (Initially Hidden) -->
-                <div id="requests-container" class="search-container d-none">
-                    <h6 class="px-3 py-2 mb-0">Friend Requests</h6>
-                    <div id="requests-list" class="user-list"></div>
-                </div>
-
-                <!-- Search Area (Initially Hidden) -->
-                <div id="search-container" class="search-container d-none">
-                    <div class="search-input-wrapper">
+                <!-- Search Area -->
+                <div class="search-bar-v2">
+                    <div class="search-input-wrapper-v2">
                         <i class="fas fa-search"></i>
-                        <input type="text" id="user-search-input" placeholder="Search users..." oninput="handleSearch(this.value)">
-                        <button onclick="toggleSearch()">&times;</button>
+                        <input type="text" id="user-search-input" placeholder="Search friends or new users..." oninput="handleSearch(this.value)">
                     </div>
-                    <div id="search-results" class="user-list"></div>
                 </div>
 
-                <!-- Chat/Friends List -->
-                <div id="chat-list" class="user-list">
-                    <div class="list-placeholder">No conversations yet. Start a new chat!</div>
+                <!-- List Area -->
+                <div id="sidebar-lists-container">
+                    <!-- Friend Requests -->
+                    <div id="requests-container" class="search-container d-none">
+                        <h6 class="list-title">Pending Requests</h6>
+                        <div id="requests-list" class="user-list-v2"></div>
+                    </div>
+
+                    <!-- Search Results -->
+                    <div id="search-container" class="search-container d-none">
+                        <h6 class="list-title">Search Results</h6>
+                        <div id="search-results" class="user-list-v2"></div>
+                    </div>
+
+                    <!-- Chat List -->
+                    <div id="chat-list" class="user-list-v2">
+                        <div class="list-placeholder">No conversations yet.</div>
+                    </div>
                 </div>
             </div>
 
@@ -101,32 +97,100 @@
                 <div id="no-chat-selected" class="no-chat-selected">
                     <div class="empty-state">
                         <div class="ch-logo large">CH</div>
-                        <h2>Select a friend to start chatting</h2>
-                        <p>Your messages are secured with end-to-end encryption.</p>
+                        <h2>Connect Hub</h2>
+                        <p>Send and receive messages in real-time.</p>
                     </div>
                 </div>
 
                 <div id="active-chat" class="active-chat d-none">
-                    <div class="chat-header">
-                        <button class="btn-icon mobile-only me-2" onclick="backToSidebar()"><i class="fas fa-arrow-left"></i> Back</button>
-                        <div class="chat-header-info">
+                    <div class="chat-header-v2">
+                        <button class="btn-icon mobile-only me-2" onclick="backToSidebar()"><i class="fas fa-arrow-left"></i></button>
+                        <div class="chat-header-info-v2">
                             <img src="" id="chat-avatar" class="avatar-sm" alt="">
-                            <div>
+                            <div class="chat-user-meta">
                                 <h4 id="chat-name">Name</h4>
                                 <span id="chat-status" class="status-indicator">offline</span>
                             </div>
                         </div>
+                        <div class="chat-header-actions">
+                            <button class="btn-icon"><i class="fas fa-search"></i></button>
+                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
                     </div>
                     
                     <div id="message-container" class="message-container">
-                        <!-- Messages go here -->
+                        <!-- Messages -->
                     </div>
 
-                    <form id="message-form" class="chat-input-area" onsubmit="sendMessage(event)">
+                    <form id="message-form" class="chat-input-area-v2" onsubmit="sendMessage(event)">
                         <button type="button" class="btn-icon"><i class="far fa-smile"></i></button>
+                        <button type="button" class="btn-icon"><i class="fas fa-plus"></i></button>
                         <input type="text" id="msg-input" placeholder="Type a message..." autocomplete="off">
-                        <button type="submit" class="btn-send"><i class="fas fa-paper-plane"></i></button>
+                        <button type="submit" class="btn-send-v2"><i class="fas fa-paper-plane"></i></button>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Drawer -->
+        <div id="settings-drawer" class="settings-drawer">
+            <div class="drawer-header">
+                <button class="btn-icon" onclick="toggleSettings()"><i class="fas fa-arrow-left"></i></button>
+                <h3>Settings</h3>
+            </div>
+            <div class="drawer-body">
+                <div class="drawer-profile-section">
+                    <div class="drawer-avatar-wrapper">
+                        <img src="" id="drawer-my-avatar" class="avatar-xl">
+                        <button class="edit-avatar-btn" onclick="openEditModal('picture')"><i class="fas fa-camera"></i></button>
+                    </div>
+                    <h4 id="drawer-my-name">User Name</h4>
+                    <p id="drawer-my-phone" class="text-secondary">+1234567890</p>
+                </div>
+
+                <div class="drawer-menu">
+                    <div class="drawer-item" onclick="openEditModal('name')">
+                        <div class="drawer-item-icon"><i class="fas fa-user"></i></div>
+                        <div class="drawer-item-text">
+                            <span>Name</span>
+                            <small id="drawer-display-name">Change display name</small>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="drawer-item" onclick="openEditModal('bio')">
+                        <div class="drawer-item-icon"><i class="fas fa-info-circle"></i></div>
+                        <div class="drawer-item-text">
+                            <span>About</span>
+                            <small id="drawer-display-bio">Edit your bio</small>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="drawer-item" onclick="toggleTheme()">
+                        <div class="drawer-item-icon"><i class="fas fa-adjust"></i></div>
+                        <div class="drawer-item-text">
+                            <span>Appearance</span>
+                            <small>Light / Dark mode</small>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-switch-check" onchange="toggleTheme(event)">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                    <div class="drawer-item" onclick="openModal('password-modal')">
+                        <div class="drawer-item-icon"><i class="fas fa-lock"></i></div>
+                        <div class="drawer-item-text">
+                            <span>Security</span>
+                            <small>Change password</small>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="drawer-item text-danger" onclick="openModal('delete-modal')">
+                        <div class="drawer-item-icon"><i class="fas fa-trash-alt"></i></div>
+                        <div class="drawer-item-text">
+                            <span>Account</span>
+                            <small class="text-danger">Delete account permanently</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -145,19 +209,21 @@
                     <label class="form-label">Phone Number</label>
                     <div class="phone-input-group">
                         <select id="login-country" class="country-select" onchange="updateFlag('login')"></select>
-                        <input type="tel" id="login-phone" class="form-control phone-number-input" placeholder="9876543210" required>
+                        <input type="tel" id="login-phone" class="form-control phone-number-input"
+                            placeholder="Enter your Phone Number" required>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" id="login-password" class="form-control" placeholder="Enter password" required>
+                    <input type="password" id="login-password" class="form-control" placeholder="Enter password"
+                        required>
                 </div>
                 <div id="login-error" class="alert alert-danger d-none"></div>
                 <button type="submit" class="btn btn-primary w-100">
                     <i class="fas fa-sign-in-alt me-2"></i>Sign In
                 </button>
                 <p class="text-center mt-3 mb-0">
-                    <small>Don't have an account? 
+                    <small>Don't have an account?
                         <a href="#" onclick="switchModal('login-modal','register-modal')">Create one</a>
                     </small>
                 </p>
@@ -165,38 +231,39 @@
         </div>
     </div>
 
-    <!-- ===== PROFILE MODAL ===== -->
-    <div id="profile-modal" class="modal" style="display:none;">
-        <div class="modal-content profile-modal-content">
+    <!-- ===== CHANGE PASSWORD MODAL ===== -->
+    <div id="password-modal" class="modal" style="display:none;">
+        <div class="modal-content">
             <div class="modal-header-row">
-                <h3>My Profile</h3>
-                <button class="modal-close-btn" onclick="closeModal('profile-modal')">&times;</button>
+                <h3>Change Password</h3>
+                <button class="modal-close-btn" onclick="closeModal('password-modal')">&times;</button>
             </div>
-            <div class="profile-view-body">
-                <div class="profile-main-info">
-                    <div class="profile-avatar-wrapper">
-                        <img src="" id="profile-display-img" class="avatar-xl" alt="Profile">
-                        <button class="edit-avatar-btn" onclick="openEditModal('picture')"><i class="fas fa-camera"></i></button>
-                    </div>
-                    <h2 id="profile-display-name">User Name</h2>
-                    <p id="profile-display-phone" class="text-secondary">+1234567890</p>
+            <form id="change-password-form" onsubmit="handleChangePassword(event)">
+                <div class="mb-3">
+                    <label class="form-label">Current Password</label>
+                    <input type="password" id="old-password" class="form-control" required>
                 </div>
-                
-                <div class="profile-section">
-                    <label>About / Bio</label>
-                    <div class="profile-field-card">
-                        <p id="profile-display-bio">No bio set.</p>
-                        <button class="field-edit-btn" onclick="openEditModal('bio')"><i class="fas fa-pen"></i></button>
-                    </div>
+                <div class="mb-3">
+                    <label class="form-label">New Password</label>
+                    <input type="password" id="new-password" class="form-control" minlength="6" required>
                 </div>
+                <div id="password-error" class="alert alert-danger d-none"></div>
+                <button type="submit" class="btn btn-primary w-100">Update Password</button>
+            </form>
+        </div>
+    </div>
 
-                <div class="profile-section">
-                    <label>Display Name</label>
-                    <div class="profile-field-card">
-                        <span id="profile-display-name-sec">User Name</span>
-                        <button class="field-edit-btn" onclick="openEditModal('name')"><i class="fas fa-pen"></i></button>
-                    </div>
-                </div>
+    <!-- ===== DELETE ACCOUNT MODAL ===== -->
+    <div id="delete-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header-row">
+                <h3 class="text-danger">Delete Account?</h3>
+                <button class="modal-close-btn" onclick="closeModal('delete-modal')">&times;</button>
+            </div>
+            <p>This action is permanent and cannot be undone. All your messages and data will be lost.</p>
+            <div class="btn-group-v mt-3">
+                <button class="btn btn-danger w-100 mb-2" onclick="handleDeleteAccount()">Yes, Delete Permanently</button>
+                <button class="btn btn-secondary w-100" onclick="closeModal('delete-modal')">Cancel</button>
             </div>
         </div>
     </div>
@@ -210,7 +277,7 @@
             </div>
             <form id="edit-profile-form" onsubmit="handleProfileUpdate(event)">
                 <input type="hidden" id="edit-type">
-                
+
                 <div id="edit-name-group" class="mb-3 d-none">
                     <label class="form-label">Full Name</label>
                     <input type="text" id="edit-name-input" class="form-control" placeholder="Enter your name">
@@ -218,7 +285,8 @@
 
                 <div id="edit-bio-group" class="mb-3 d-none">
                     <label class="form-label">Bio (Max 150 chars)</label>
-                    <textarea id="edit-bio-input" class="form-control" rows="3" maxlength="150" placeholder="Tell us something about yourself..."></textarea>
+                    <textarea id="edit-bio-input" class="form-control" rows="3" maxlength="150"
+                        placeholder="Tell us something about yourself..."></textarea>
                     <div class="text-end mt-1"><small id="bio-counter" class="text-secondary">0/150</small></div>
                 </div>
 
@@ -226,7 +294,8 @@
                     <label class="form-label">Profile Picture</label>
                     <div class="picture-upload-wrapper">
                         <img src="" id="upload-preview" class="avatar-lg mb-3 d-none" alt="Preview">
-                        <input type="file" id="edit-picture-input" class="form-control" accept="image/*" onchange="previewImage(event)">
+                        <input type="file" id="edit-picture-input" class="form-control" accept="image/*"
+                            onchange="previewImage(event)">
                         <small class="text-secondary d-block mt-2">Recommended: Square image, max 2MB</small>
                     </div>
                 </div>
@@ -251,12 +320,14 @@
                     <label class="form-label">Phone Number</label>
                     <div class="phone-input-group">
                         <select id="reg-country" class="country-select" onchange="updateFlag('reg')"></select>
-                        <input type="tel" id="reg-phone" class="form-control phone-number-input" placeholder="9876543210" required>
+                        <input type="tel" id="reg-phone" class="form-control phone-number-input"
+                            placeholder="9876543210" required>
                     </div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" id="reg-password" class="form-control" placeholder="Min. 6 characters" required>
+                    <input type="password" id="reg-password" class="form-control" placeholder="Min. 6 characters"
+                        required>
                 </div>
                 <div id="register-error" class="alert alert-danger d-none"></div>
                 <div id="register-success" class="alert alert-success d-none"></div>
@@ -264,7 +335,7 @@
                     <i class="fas fa-user-plus me-2"></i>Create Account
                 </button>
                 <p class="text-center mt-3 mb-0">
-                    <small>Already have an account? 
+                    <small>Already have an account?
                         <a href="#" onclick="switchModal('register-modal','login-modal')">Sign In</a>
                     </small>
                 </p>
@@ -275,4 +346,5 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>

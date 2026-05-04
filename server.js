@@ -146,6 +146,44 @@ app.post('/api/profile/update', async (req, res) => {
     }
 });
 
+// Change Password
+app.post('/api/auth/change-password', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ success: false });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        const { currentPassword, newPassword } = req.body;
+        
+        const user = await User.findById(decoded.userId);
+        if (!user || !(await user.comparePassword(currentPassword))) {
+            return res.status(401).json({ success: false, message: 'Incorrect current password' });
+        }
+
+        user.password = newPassword; // Pre-save hook will hash it
+        await user.save();
+        res.json({ success: true, message: 'Password updated successfully' });
+    } catch (err) {
+        res.status(500).json({ success: false });
+    }
+});
+
+// Delete Account
+app.delete('/api/account/delete', async (req, res) => {
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ success: false });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        await User.findByIdAndDelete(decoded.userId);
+        // Also delete their messages
+        await Message.deleteMany({ $or: [{ sender: decoded.userId }, { receiver: decoded.userId }] });
+        res.json({ success: true, message: 'Account deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ success: false });
+    }
+});
+
 
 // Search Users
 app.get('/api/users/search', async (req, res) => {
