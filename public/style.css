@@ -522,7 +522,25 @@ a:hover { text-decoration: underline; }
 }
 
 /* ── Responsiveness ──────────────────────────────────────────────── */
-.mobile-only { display: none; }
+.mobile-only { 
+    display: none; 
+}
+
+.chat-header .mobile-only {
+    display: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--green);
+    background: rgba(0, 168, 132, 0.1);
+    padding: 6px 12px;
+    border-radius: 8px;
+    align-items: center;
+    gap: 8px;
+}
+
+.chat-header .mobile-only:hover {
+    background: rgba(0, 168, 132, 0.2);
+}
 
 @media (max-width: 768px) {
     .chat-sidebar {
@@ -541,7 +559,9 @@ a:hover { text-decoration: underline; }
         width: 100%;
     }
 
-    .mobile-only { display: block; }
+    .chat-header .mobile-only { 
+        display: flex; 
+    }
 
     .modal-content {
         width: 90%;

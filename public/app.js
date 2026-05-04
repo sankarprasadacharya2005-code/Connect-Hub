@@ -639,9 +639,9 @@ function toggleTheme() {
 }
 
 function updateThemeUI(isDark) {
-    const themeText = document.getElementById('theme-text');
-    if (themeText) {
-        themeText.textContent = isDark ? 'Light Mode' : 'Dark Mode';
+    const themeIcon = document.getElementById('theme-icon');
+    if (themeIcon) {
+        themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
     }
 }
 
