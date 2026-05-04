@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connect Hub - Structural Steel Calculator</title>
+    <title>Connect Hub - Chat</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="dark-theme">
-    <!-- Welcome Screen -->
+
+    <!-- ===== WELCOME / LANDING SCREEN ===== -->
     <div id="welcome-screen" class="welcome-screen">
         <div class="welcome-content">
             <div class="ch-logo large">CH</div>
             <h1>Welcome to Connect Hub</h1>
-            <p>Experience the next level of structural engineering and private messaging. Secure, fast, and beautiful.</p>
+            <p>Secure, fast, and beautiful real-time messaging. Connect with friends privately.</p>
             <div class="welcome-actions">
-                <button class="btn btn-primary btn-lg" onclick="openModal('register-modal')">Create New Account</button>
-                <button class="btn btn-secondary btn-lg" onclick="openModal('login-modal')">Sign In to Continue</button>
+                <button class="btn btn-primary btn-lg" onclick="openModal('register-modal')">
+                    <i class="fas fa-user-plus me-2"></i>Create New Account
+                </button>
+                <button class="btn btn-secondary btn-lg" onclick="openModal('login-modal')">
+                    <i class="fas fa-sign-in-alt me-2"></i>Sign In to Continue
+                </button>
             </div>
             <div class="welcome-footer">
                 <span>&copy; 2026 Connect Hub. All rights reserved.</span>
@@ -25,113 +30,246 @@
         </div>
     </div>
 
-    <div class="app-container">
-        <!-- Navigation Bar -->
-        <nav class="navbar">
-            <div class="nav-left">
-                <div class="ch-logo">CH</div>
-                <span class="brand-name">Connect Hub</span>
-            </div>
-            <div class="nav-right" id="nav-actions">
-                <button class="btn btn-secondary" onclick="openModal('register-modal')">Create Account</button>
-                <button class="btn btn-primary" onclick="openModal('login-modal')">Login</button>
-            </div>
-        </nav>
-
-        <div class="main-content container mt-4">
-            <h2 class="section-title"><i class="fas fa-drafting-compass me-2"></i>Steel Section Properties</h2>
-            
-            <!-- TABLES SECTION -->
-            <div class="table-container mb-5">
-                <!-- Round Bar -->
-                <table class="table table-bordered">
-                    <thead>
-                        <tr><th colspan="5">Section Type: Round Bar</th></tr>
-                        <tr>
-                            <th>Size (mm)</th>
-                            <th>Area (cm²)</th>
-                            <th>Weight (kg/m)</th>
-                            <th>Zx (cm³)</th>
-                            <th>Zy (cm³)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>6</td><td>0.28</td><td>0.22</td><td>0.02</td><td>0.02</td></tr>
-                        <tr><td>8</td><td>0.50</td><td>0.39</td><td>0.05</td><td>0.05</td></tr>
-                        <tr><td>10</td><td>0.79</td><td>0.62</td><td>0.10</td><td>0.10</td></tr>
-                        <tr><td>12</td><td>1.13</td><td>0.89</td><td>0.17</td><td>0.17</td></tr>
-                    </tbody>
-                </table>
-
-                <!-- RHS Section -->
-                <table class="table table-bordered">
-                    <thead>
-                        <tr><th colspan="5">Section Type: Hollow Section - Rectangular (RHS)</th></tr>
-                        <tr>
-                            <th>Size (mm)</th>
-                            <th>Area (cm²)</th>
-                            <th>Weight (kg/m)</th>
-                            <th>Zx (cm³)</th>
-                            <th>Zy (cm³)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>50x30x3.0</td><td>4.44</td><td>3.49</td><td>6.39</td><td>4.52</td></tr>
-                        <tr><td>60x40x3.0</td><td>5.64</td><td>4.43</td><td>10.30</td><td>7.92</td></tr>
-                        <tr><td>80x40x4.0</td><td>8.96</td><td>7.03</td><td>21.10</td><td>13.60</td></tr>
-                        <tr><td>100x50x5.0</td><td>14.00</td><td>11.00</td><td>41.80</td><td>26.40</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- CALCULATOR SECTION -->
-            <div class="calculator-card p-4">
-                <h3 class="mb-4 text-center"><i class="fas fa-calculator me-2"></i>Live Property Calculator</h3>
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Select Type</label>
-                        <select id="sectionType" class="form-select">
-                            <option value="">-- Choose Type --</option>
-                            <option value="Round Bar">Round Bar</option>
-                            <option value="RHS">Rectangular Hollow (RHS)</option>
-                        </select>
+    <!-- ===== MAIN APP (shown after login) ===== -->
+    <div class="app-container" id="app-container" style="display:none;">
+        <div class="chat-layout">
+            <!-- Sidebar -->
+            <div class="chat-sidebar">
+                <div class="sidebar-header">
+                    <div class="brand-group">
+                        <div class="ch-logo-small">CH</div>
+                        <span class="app-title">Connect Hub</span>
                     </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Select Size</label>
-                        <select id="sectionSize" class="form-select" disabled>
-                            <option value="">-- Select Type First --</option>
-                        </select>
-                    </div>
-                    <div class="col-md-12 mt-4">
-                        <div id="resultsArea" class="p-3 bg-light border rounded d-none text-dark">
-                            <h5 class="border-bottom pb-2">Properties:</h5>
-                            <div class="row text-center">
-                                <div class="col-3"><small class="text-muted d-block">Weight</small><span id="resWeight" class="fw-bold">-</span></div>
-                                <div class="col-3"><small class="text-muted d-block">Area</small><span id="resArea" class="fw-bold">-</span></div>
-                                <div class="col-3"><small class="text-muted d-block">Zx</small><span id="resZx" class="fw-bold">-</span></div>
-                                <div class="col-3"><small class="text-muted d-block">Zy</small><span id="resZy" class="fw-bold">-</span></div>
+                    <div class="header-actions">
+                        <button class="btn-icon" title="Friend Requests" onclick="toggleRequests()">
+                            <i class="fas fa-user-friends"></i>
+                            <span id="request-badge" class="badge d-none">0</span>
+                        </button>
+                        <button class="btn-icon" title="New Chat" onclick="toggleSearch()"><i class="fas fa-plus"></i></button>
+                        <div class="dropdown-wrapper">
+                            <button class="btn-icon" id="header-menu-btn" onclick="toggleDropdown(event)">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <div id="header-dropdown" class="custom-dropdown d-none">
+                                <div class="dropdown-item" onclick="openProfileModal()">
+                                    <i class="fas fa-user"></i> Profile
+                                </div>
+                                <div class="dropdown-item" onclick="openEditModal('name')">
+                                    <i class="fas fa-signature"></i> Edit Name
+                                </div>
+                                <div class="dropdown-item" onclick="openEditModal('bio')">
+                                    <i class="fas fa-info-circle"></i> Edit Bio
+                                </div>
+                                <div class="dropdown-item" onclick="openEditModal('picture')">
+                                    <i class="fas fa-camera"></i> Change Photo
+                                </div>
+                                <div class="dropdown-item" onclick="toggleTheme()">
+                                    <i class="fas fa-adjust"></i> <span id="theme-text">Dark Mode</span>
+                                </div>
+                                <hr>
+                                <div class="dropdown-item logout-item" onclick="logout()">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 mt-3">
-                        <label class="form-label">Length (meters)</label>
-                        <input type="number" id="beamLength" class="form-control" placeholder="6.0">
+                </div>
+
+                <!-- Requests Area (Initially Hidden) -->
+                <div id="requests-container" class="search-container d-none">
+                    <h6 class="px-3 py-2 mb-0">Friend Requests</h6>
+                    <div id="requests-list" class="user-list"></div>
+                </div>
+
+                <!-- Search Area (Initially Hidden) -->
+                <div id="search-container" class="search-container d-none">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="user-search-input" placeholder="Search users..." oninput="handleSearch(this.value)">
+                        <button onclick="toggleSearch()">&times;</button>
                     </div>
-                    <div class="col-md-12 mt-3">
-                        <div class="alert alert-primary">
-                            <strong>Total Weight: </strong> <span id="totalWeight">0.00</span> kg
+                    <div id="search-results" class="user-list"></div>
+                </div>
+
+                <!-- Chat/Friends List -->
+                <div id="chat-list" class="user-list">
+                    <div class="list-placeholder">No conversations yet. Start a new chat!</div>
+                </div>
+            </div>
+
+            <!-- Main Chat Area -->
+            <div class="chat-main" id="chat-main">
+                <div id="no-chat-selected" class="no-chat-selected">
+                    <div class="empty-state">
+                        <div class="ch-logo large">CH</div>
+                        <h2>Select a friend to start chatting</h2>
+                        <p>Your messages are secured with end-to-end encryption.</p>
+                    </div>
+                </div>
+
+                <div id="active-chat" class="active-chat d-none">
+                    <div class="chat-header">
+                        <button class="btn-icon mobile-only me-2" onclick="backToSidebar()"><i class="fas fa-arrow-left"></i></button>
+                        <div class="chat-header-info">
+                            <img src="" id="chat-avatar" class="avatar-sm" alt="">
+                            <div>
+                                <h4 id="chat-name">Name</h4>
+                                <span id="chat-status" class="status-indicator">offline</span>
+                            </div>
                         </div>
+                    </div>
+                    
+                    <div id="message-container" class="message-container">
+                        <!-- Messages go here -->
+                    </div>
+
+                    <form id="message-form" class="chat-input-area" onsubmit="sendMessage(event)">
+                        <button type="button" class="btn-icon"><i class="far fa-smile"></i></button>
+                        <input type="text" id="msg-input" placeholder="Type a message..." autocomplete="off">
+                        <button type="submit" class="btn-send"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ===== LOGIN MODAL ===== -->
+    <div id="login-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header-row">
+                <h3><i class="fas fa-sign-in-alt me-2"></i>Sign In</h3>
+                <button class="modal-close-btn" onclick="closeModal('login-modal')">&times;</button>
+            </div>
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <div class="phone-input-group">
+                        <select id="login-country" class="country-select" onchange="updateFlag('login')"></select>
+                        <input type="tel" id="login-phone" class="form-control phone-number-input" placeholder="9876543210" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="Enter password" required>
+                </div>
+                <div id="login-error" class="alert alert-danger d-none"></div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                </button>
+                <p class="text-center mt-3 mb-0">
+                    <small>Don't have an account? 
+                        <a href="#" onclick="switchModal('login-modal','register-modal')">Create one</a>
+                    </small>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== PROFILE MODAL ===== -->
+    <div id="profile-modal" class="modal" style="display:none;">
+        <div class="modal-content profile-modal-content">
+            <div class="modal-header-row">
+                <h3>My Profile</h3>
+                <button class="modal-close-btn" onclick="closeModal('profile-modal')">&times;</button>
+            </div>
+            <div class="profile-view-body">
+                <div class="profile-main-info">
+                    <div class="profile-avatar-wrapper">
+                        <img src="" id="profile-display-img" class="avatar-xl" alt="Profile">
+                        <button class="edit-avatar-btn" onclick="openEditModal('picture')"><i class="fas fa-camera"></i></button>
+                    </div>
+                    <h2 id="profile-display-name">User Name</h2>
+                    <p id="profile-display-phone" class="text-secondary">+1234567890</p>
+                </div>
+                
+                <div class="profile-section">
+                    <label>About / Bio</label>
+                    <div class="profile-field-card">
+                        <p id="profile-display-bio">No bio set.</p>
+                        <button class="field-edit-btn" onclick="openEditModal('bio')"><i class="fas fa-pen"></i></button>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <label>Display Name</label>
+                    <div class="profile-field-card">
+                        <span id="profile-display-name-sec">User Name</span>
+                        <button class="field-edit-btn" onclick="openEditModal('name')"><i class="fas fa-pen"></i></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modals (Simplified) -->
-    <div id="login-modal" class="modal">
+    <!-- ===== EDIT MODAL (Generic for Name/Bio/Picture) ===== -->
+    <div id="edit-modal" class="modal" style="display:none;">
         <div class="modal-content">
-            <h3>Login</h3>
-            <button onclick="closeModal('login-modal')">Close</button>
+            <div class="modal-header-row">
+                <h3 id="edit-modal-title">Edit Profile</h3>
+                <button class="modal-close-btn" onclick="closeModal('edit-modal')">&times;</button>
+            </div>
+            <form id="edit-profile-form" onsubmit="handleProfileUpdate(event)">
+                <input type="hidden" id="edit-type">
+                
+                <div id="edit-name-group" class="mb-3 d-none">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="edit-name-input" class="form-control" placeholder="Enter your name">
+                </div>
+
+                <div id="edit-bio-group" class="mb-3 d-none">
+                    <label class="form-label">Bio (Max 150 chars)</label>
+                    <textarea id="edit-bio-input" class="form-control" rows="3" maxlength="150" placeholder="Tell us something about yourself..."></textarea>
+                    <div class="text-end mt-1"><small id="bio-counter" class="text-secondary">0/150</small></div>
+                </div>
+
+                <div id="edit-picture-group" class="mb-3 d-none">
+                    <label class="form-label">Profile Picture</label>
+                    <div class="picture-upload-wrapper">
+                        <img src="" id="upload-preview" class="avatar-lg mb-3 d-none" alt="Preview">
+                        <input type="file" id="edit-picture-input" class="form-control" accept="image/*" onchange="previewImage(event)">
+                        <small class="text-secondary d-block mt-2">Recommended: Square image, max 2MB</small>
+                    </div>
+                </div>
+
+                <div id="edit-error" class="alert alert-danger d-none"></div>
+                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    <div id="register-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header-row">
+                <h3><i class="fas fa-user-plus me-2"></i>Create Account</h3>
+                <button class="modal-close-btn" onclick="closeModal('register-modal')">&times;</button>
+            </div>
+            <form id="register-form" onsubmit="handleRegister(event)">
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="reg-name" class="form-control" placeholder="Your name" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <div class="phone-input-group">
+                        <select id="reg-country" class="country-select" onchange="updateFlag('reg')"></select>
+                        <input type="tel" id="reg-phone" class="form-control phone-number-input" placeholder="9876543210" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="reg-password" class="form-control" placeholder="Min. 6 characters" required>
+                </div>
+                <div id="register-error" class="alert alert-danger d-none"></div>
+                <div id="register-success" class="alert alert-success d-none"></div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-user-plus me-2"></i>Create Account
+                </button>
+                <p class="text-center mt-3 mb-0">
+                    <small>Already have an account? 
+                        <a href="#" onclick="switchModal('register-modal','login-modal')">Sign In</a>
+                    </small>
+                </p>
+            </form>
         </div>
     </div>
 

@@ -320,10 +320,17 @@ io.on('connection', (socket) => {
         await msg.save();
         const populatedMsg = await msg.populate('sender', 'name username picture role');
         
-        if (room && room !== 'public') {
+        // Emit to the specific chat room (for people currently in the chat)
+        if (room) {
             io.to(room).emit('receive_message', populatedMsg);
         }
+        
+        // Also emit directly to the receiver's personal room (for notifications/sidebar updates)
+        if (receiverId) {
+            io.to(`user_${receiverId}`).emit('receive_message', populatedMsg);
+        }
     });
+
 
     socket.on('typing', (data) => {
         const user = users.get(socket.id);
@@ -362,7 +369,22 @@ io.on('connection', (socket) => {
 
 });
 
+const os = require('os');
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${PORT}`);
+    
+    const interfaces = os.networkInterfaces();
+    let networkIP = null;
+    for (const name of Object.keys(interfaces)) {
+        for (const iface of interfaces[name]) {
+            if (iface.family === 'IPv4' && !iface.internal) {
+                networkIP = iface.address;
+            }
+        }
+    }
+    
+    if (networkIP) {
+        console.log(`Network Host Link: http://${networkIP}:${PORT}`);
+    }
 });
